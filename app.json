@@ -22,6 +22,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": ""
+    "description": "App for popular movies and favorite collection ",
+    "githubUrl": "https://github.com/itayargi/TmdbMovies"
   }
 }

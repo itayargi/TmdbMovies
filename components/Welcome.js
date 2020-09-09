@@ -15,31 +15,16 @@ import { DataStorage } from "../components/DataMoviesStorage";
 export default function Welcome() {
   const [favoriteList, setFavoriteList] = useContext(DataStorage);
   const [movieList, setMovieList] = useState([]);
-  //   const [favorMovie, setFavorMovie] = useState([]);
 
-  //   const [favoriteMovies, setFavoriteMovies] = useState([]);
-  //   var favoriteMovies = [""];
   const apiKey = "dd22d2352bf6e11b0e6fe40a9970011b";
   const apiToken =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZDIyZDIzNTJiZjZlMTFiMGU2ZmU0MGE5OTcwMDExYiIsInN1YiI6IjVmNTY2NjgyZTYyNzE5MDAzN2VkMzZkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VGg6Cmj5bJAUQA_72PQ7SAfYPSDBBDqRqrE-8TWPTUE";
   const mainDomain = "https://api.themoviedb.org/3/";
   const popularDomain = `movie/popular?api_key=${apiKey}&language=en-US&page=1`;
-  //   console.log("favorites:", favoriteList);
 
-  //   //   add movie to favorite list
-  //     const addMovieToFavorite = (movie) => {
-  //       setFavoriteMovies([ ...favoriteMovies, movie ]);
-  //     };
-  // remove movie from favorite
-  //   const removeMovieFromFavorite = (movie, id) => {
-  //     let newFavoriteList = [...movie];
-  //     setFavoriteMovies(newFavoriteList.slice(id, 1));
-  //   };
   // axios
   const axiosRequest = async () => {
     const favoriteUrl = mainDomain + popularDomain;
-    // console.log("favorite url", favoriteUrl);
-    // api key = dd22d2352bf6e11b0e6fe40a9970011b
 
     try {
       let res = await axios({
@@ -54,9 +39,7 @@ export default function Welcome() {
       let dataFromServer = res.data;
       if (dataFromServer && dataFromServer.results) {
         setMovieList(dataFromServer.results);
-        // setUserData({ ...userData, popularMovies: dataFromServer.results });
-        console.log(dataFromServer.results);
-        // return dataFromServer;
+        // console.log(dataFromServer.results);
       }
     } catch (e) {
       console.log(`😱 line 30 Axios failed: ${e}`);
@@ -66,7 +49,6 @@ export default function Welcome() {
   };
   useEffect(() => {
     axiosRequest();
-    console.log(typeof movieList);
     return () => {
       <Text>...Loading</Text>;
     };
@@ -79,11 +61,7 @@ export default function Welcome() {
     });
   };
   const goToFavorite = () => {
-    // console.log("updateList", favoriteList);
-    // console.log("type updateList", typeof favoriteList);
-
     RootNavigation.navigate("ListOfMovies", {
-      //   movieList: favoriteList,
       type: "favorite",
     });
   };
@@ -143,25 +121,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-// try {
-//   let res = await axios({
-//     url:
-//       "https://api.themoviedb.org/3/configuration?api_key=dd22d2352bf6e11b0e6fe40a9970011b",
-//     method: "get",
-//     headers: {
-//       "Authorization": `Bearer ${apiToken}`,
-//       "Content-Type": "application/json;charset=utf-8",
-//     },
-//   });
-//   let dataFromServer = res.data;
-//   if (dataFromServer) {
-//     //   setMovieList(dataFromServer);
-//     console.log("configuration", dataFromServer);
-//     // return dataFromServer;
-//   }
-// } catch (e) {
-//   console.log(`😱 line 30 Axios failed: ${e}`);
-//   alert("Axios", `${e}`);
-//   return "";
-// }
