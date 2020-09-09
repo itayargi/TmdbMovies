@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
   Platform,
+  Modal,
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
   SafeAreaView,
+  TouchableHighlight,
 } from "react-native";
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
@@ -24,37 +26,70 @@ export default function MovieDetails({ route, navigation }) {
   //       "When Grizz, Panda, and Ice Bear's love of food trucks and viral videos went out of hand, it catches the attention of Agent Trout from the National Wildlife Control, who pledges to restore the “natural order” by separating them forever. Chased away from their home, the Bears embark on an epic road trip as they seek refuge in Canada, with their journey being filled with new friends, perilous obstacles, and huge parties. The risky journey also forces the Bears to face how they first met and became brothers, in order to keep their family bond from splitting apart. ",
   //     vote_average: "7.8 ",
   //   };
-  const typeOfDevice = Platform.OS;
-  const iconArrowPosition = typeOfDevice == "android" ? "right" : "left";
-  const rightAngle = require("../assets/Icons/rightAngle.png");
-  const leftAngle = require("../assets/Icons/leftAngle.png");
-  const backIcon = iconArrowPosition == "android" ? leftAngle : rightAngle;
-  const fontColor = "white";
-
   const [favoriteList, setFavoriteList] = useContext(DataStorage);
+  const [modalDisplay, setModalDisplay] = useState(false);
+  const [screenOpacity, setScreenOpacity] = useState(1);
+  const [displayForWebUser, setDisplayForWebUser] = useState("none");
+  const [addBtnStatusColor, setAddBtnStatusColor] = useState(
+    checkIfMovieOnList(movie) ? colors.colordarkCoral : colors.colorBlueLight
+  );
   const imageUrl = `http://image.tmdb.org/t/p/original/${movie.poster_path}`;
   let imageAdress = { uri: imageUrl };
 
   //   let imageAdress = { uri: "/n6hptKS7Y0ZjkYwbqKOK3jz9XAC.jpg" };
-
+  //   useEffect(() => {
+  //     return () => {
+  //       <Text>...Loading</Text>;
+  //     };
+  //   }, []);
+  function checkIfMovieOnList(movie) {
+    if (favoriteList == undefined) return false;
+    let duplicateMovies = favoriteList.find(
+      (movieObj) => movieObj.id == movie.id
+    );
+    if (duplicateMovies == undefined) return false;
+    else {
+      return true;
+    }
+  }
   //   remove movie from favorite list
   const removeMovieFromFavorite = (index) => {
     setFavoriteList(favoriteList.filter((item) => item.id !== index));
+    setAddBtnStatusColor(colors.colorBlueLight);
   };
 
   //   add movie to favorite list
   const addToFavorite = (movie) => {
-    let duplicateMovies = favoriteList.find(
-      (movieObj) => movieObj.id == movie.id
-    );
-    if (duplicateMovies == undefined) {
+    // let duplicateMovies = favoriteList.find(
+    //   (movieObj) => movieObj.id == movie.id
+    // );
+    // if (duplicateMovies == undefined) {
+
+    if (!checkIfMovieOnList(movie)) {
       setFavoriteList([...favoriteList, movie]);
+      // setAddBtnStatusColor(colors.colorBlueLight);
+      setAddBtnStatusColor(colors.colordarkCoral);
+    }
+
+    // if the user want to add a movie which is already on the list
+    else {
+      console.log("here");
+      setModalDisplay(true);
+      setScreenOpacity(0.5);
+      setDisplayForWebUser("flex");
     }
   };
-
+  const okBtn = () => {
+    setModalDisplay(false);
+    setScreenOpacity(1);
+    setDisplayForWebUser("none");
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground style={styles.background} source={imageAdress}>
+      <ImageBackground
+        style={[styles.background, { opacity: screenOpacity }]}
+        source={imageAdress}
+      >
         <View style={styles.btnBack}>
           <TouchableOpacity
             onPress={() => RootNavigation.navigate("ListOfMovies")}
@@ -91,7 +126,7 @@ export default function MovieDetails({ route, navigation }) {
               onPress={() => {
                 addToFavorite(movie);
               }}
-              style={styles.btn}
+              style={[styles.btn, { backgroundColor: addBtnStatusColor }]}
             >
               <Text style={{ color: "white" }}>Add</Text>
             </TouchableOpacity>
@@ -103,6 +138,42 @@ export default function MovieDetails({ route, navigation }) {
             </TouchableOpacity>
           </View>
         </View>
+        {/* modal warning alert for trying to add a movie more then once to the favorite list */}
+        {/* ////////////////////////////////////// */}
+        <Modal
+          style={{
+            position: "absolute",
+            width: "100%",
+            alignItems: "center",
+            flex: 1,
+            // visible: modalDisplay,
+            display: displayForWebUser,
+          }}
+          transparent={true}
+          visible={modalDisplay}
+        >
+          <View style={styles.modalMain}>
+            <Text style={{ textAlign: "center", fontSize: 17 }}>
+              This movie is already on the list
+            </Text>
+            <View
+              style={{
+                // flexDirection: "row",
+                alignItems: "center",
+                width: "100%",
+                // justifyContent: "space-around",
+              }}
+            >
+              <TouchableHighlight onPress={okBtn}>
+                <View>
+                  <Text style={{ textAlign: "center", fontSize: 17 }}>
+                    <Text>OK</Text>
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -158,5 +229,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
+  },
+  // modal
+  modalMain: {
+    backgroundColor: colors.colorWhite,
+    top: 100,
+    borderRadius: 20,
+    width: "80%",
+    alignSelf: "center",
+    // height: "20%",
+    height: 100,
+    zIndex: 5,
+    justifyContent: "space-around",
   },
 });

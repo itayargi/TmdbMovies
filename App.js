@@ -28,44 +28,6 @@ export default function App() {
           <Stack.Screen name="MovieDetails" options={{ headerShown: false }}>
             {(props) => <MovieDetails {...props} />}
           </Stack.Screen>
-          {/* <Stack.Screen options={{ headerShown: false }} name="Home">
-            {(props) => (
-              <Welcome
-                {...props}
-              />
-            )}
-          </Stack.Screen> */}
-          {/* <Stack.Screen
-            options={{ headerShown: false }}
-            name="Home"
-            component={Welcome}
-          /> */}
-          {/* <Stack.Screen
-            options={{ headerShown: false }}
-            name="ListOfMovies"
-            component={ListOfMovies}
-          />
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name="MovieDetails"
-            component={MovieDetails}
-          /> */}
-
-          {/* <Stack.Screen options={{ headerShown: false }} name="ListOfMovies">
-            {(props) => (
-              <ListOfMovies
-                {...props}
-              />
-            )}
-          </Stack.Screen> */}
-          {/* <Stack.Screen options={{ headerShown: false }} name="MovieDetails">
-            {(props) => <MovieDetails {...props} />}
-          </Stack.Screen> */}
-          {/* <Stack.Screen
-            options={{ headerShown: false }}
-            name="MovieDetails"
-            component={MovieDetails}
-          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </MyProvider>
