@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Welcome from "./components/Welcome";
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,8 +19,6 @@ export default function App() {
             {(props) => <Welcome {...props} />}
           </Stack.Screen>
           {/* movie list */}
-          {/* <Stack.Screen name="ListOfMovies" component={ListOfMovies} /> */}
-
           <Stack.Screen name="ListOfMovies" options={{ headerShown: false }}>
             {(props) => <ListOfMovies {...props} />}
           </Stack.Screen>

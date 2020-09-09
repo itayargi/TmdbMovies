@@ -1,21 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
-  Platform,
   Modal,
   ImageBackground,
   TouchableOpacity,
-  ActivityIndicator,
   SafeAreaView,
-  TouchableHighlight,
 } from "react-native";
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
 import { DataStorage } from "../components/DataMoviesStorage";
-import colors from "./Colors";
+import colors from "./StylesGalery";
 
 export default function MovieDetails({ route, navigation }) {
   const { movie, index } = route.params;
@@ -60,25 +56,18 @@ export default function MovieDetails({ route, navigation }) {
 
   //   add movie to favorite list
   const addToFavorite = (movie) => {
-    // let duplicateMovies = favoriteList.find(
-    //   (movieObj) => movieObj.id == movie.id
-    // );
-    // if (duplicateMovies == undefined) {
-
     if (!checkIfMovieOnList(movie)) {
       setFavoriteList([...favoriteList, movie]);
-      // setAddBtnStatusColor(colors.colorBlueLight);
       setAddBtnStatusColor(colors.colordarkCoral);
     }
-
     // if the user want to add a movie which is already on the list
     else {
-      console.log("here");
       setModalDisplay(true);
       setScreenOpacity(0.5);
       setDisplayForWebUser("flex");
     }
   };
+  //   modal ok btn
   const okBtn = () => {
     setModalDisplay(false);
     setScreenOpacity(1);
@@ -90,11 +79,12 @@ export default function MovieDetails({ route, navigation }) {
         style={[styles.background, { opacity: screenOpacity }]}
         source={imageAdress}
       >
-        <View style={styles.btnBack}>
+        {/* back btn */}
+        <View style={colors.btnBack}>
           <TouchableOpacity
             onPress={() => RootNavigation.navigate("ListOfMovies")}
             style={[
-              styles.btn,
+              colors.btn,
               {
                 borderTopStartRadius: 50,
                 borderBottomStartRadius: 50,
@@ -107,46 +97,49 @@ export default function MovieDetails({ route, navigation }) {
         {/* details */}
         <View style={styles.detailsAndBtn}>
           <View style={styles.detailsSquere}>
+            {/* name */}
             <View style={styles.detailLine}>
               <Text style={styles.headers}>Name </Text>
               <Text style={styles.detailText}>{movie.title} </Text>
             </View>
-
+            {/* summary */}
             <View style={styles.detailLine}>
               <Text style={styles.headers}>Summary </Text>
               <Text style={styles.detailText}>{movie.overview} </Text>
             </View>
+            {/* rating */}
             <View style={styles.detailLine}>
               <Text style={styles.headers}>Rating </Text>
               <Text style={styles.detailText}>{movie.vote_average} </Text>
             </View>
           </View>
           <View style={styles.btnsRow}>
+            {/* add btn */}
             <TouchableOpacity
               onPress={() => {
                 addToFavorite(movie);
               }}
-              style={[styles.btn, { backgroundColor: addBtnStatusColor }]}
+              style={[colors.btn, { backgroundColor: addBtnStatusColor }]}
             >
-              <Text style={{ color: "white" }}>Add</Text>
+              <Text style={{ color: colors.colorWhite }}>Add</Text>
             </TouchableOpacity>
+            {/* remove btn */}
             <TouchableOpacity
               onPress={() => removeMovieFromFavorite(index)}
-              style={styles.btn}
+              style={colors.btn}
             >
-              <Text style={{ color: "white" }}>Remove</Text>
+              <Text style={{ color: colors.colorWhite }}>Remove</Text>
             </TouchableOpacity>
           </View>
         </View>
         {/* modal warning alert for trying to add a movie more then once to the favorite list */}
-        {/* ////////////////////////////////////// */}
+        {/* ////////////////////////////////////////////////////////////////////////// */}
         <Modal
           style={{
             position: "absolute",
             width: "100%",
             alignItems: "center",
             flex: 1,
-            // visible: modalDisplay,
             display: displayForWebUser,
           }}
           transparent={true}
@@ -158,19 +151,17 @@ export default function MovieDetails({ route, navigation }) {
             </Text>
             <View
               style={{
-                // flexDirection: "row",
                 alignItems: "center",
                 width: "100%",
-                // justifyContent: "space-around",
               }}
             >
-              <TouchableHighlight onPress={okBtn}>
+              <TouchableOpacity onPress={okBtn}>
                 <View>
                   <Text style={{ textAlign: "center", fontSize: 17 }}>
                     <Text>OK</Text>
                   </Text>
                 </View>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -184,23 +175,6 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-  },
-  btnBack: {
-    width: "100%",
-    justifyContent: "flex-start",
-    paddingTop: "7%",
-    paddingStart: "5%",
-  },
-  btn: {
-    width: 80,
-    height: 40,
-    backgroundColor: colors.colorBlueLight,
-    // color: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "white",
-    borderRadius: 10,
   },
   detailsAndBtn: {
     flex: 1,
@@ -237,7 +211,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: "80%",
     alignSelf: "center",
-    // height: "20%",
     height: 100,
     zIndex: 5,
     justifyContent: "space-around",

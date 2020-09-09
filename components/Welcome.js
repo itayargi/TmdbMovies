@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,27 +9,22 @@ import {
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
 import axios from "axios";
-import { DataStorage } from "../components/DataMoviesStorage";
-// RootNavigation.navigate("homePageMain");
+import colors from "./StylesGalery";
 
 export default function Welcome() {
-  const [favoriteList, setFavoriteList] = useContext(DataStorage);
   const [movieList, setMovieList] = useState([]);
-
   const apiKey = "dd22d2352bf6e11b0e6fe40a9970011b";
   const apiToken =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZDIyZDIzNTJiZjZlMTFiMGU2ZmU0MGE5OTcwMDExYiIsInN1YiI6IjVmNTY2NjgyZTYyNzE5MDAzN2VkMzZkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VGg6Cmj5bJAUQA_72PQ7SAfYPSDBBDqRqrE-8TWPTUE";
   const mainDomain = "https://api.themoviedb.org/3/";
   const popularDomain = `movie/popular?api_key=${apiKey}&language=en-US&page=1`;
 
-  // axios
+  // axios request
   const axiosRequest = async () => {
-    const favoriteUrl = mainDomain + popularDomain;
-
+    const popularUrl = mainDomain + popularDomain;
     try {
       let res = await axios({
-        url:
-          "https://api.themoviedb.org/3/movie/popular?api_key=dd22d2352bf6e11b0e6fe40a9970011b",
+        url: popularUrl,
         method: "get",
         headers: {
           "Authorization": `Bearer ${apiToken}`,
@@ -39,12 +34,10 @@ export default function Welcome() {
       let dataFromServer = res.data;
       if (dataFromServer && dataFromServer.results) {
         setMovieList(dataFromServer.results);
-        // console.log(dataFromServer.results);
       }
     } catch (e) {
       console.log(`😱 line 30 Axios failed: ${e}`);
       alert("Axios", `${e}`);
-      return "";
     }
   };
   useEffect(() => {
@@ -53,13 +46,14 @@ export default function Welcome() {
       <Text>...Loading</Text>;
     };
   }, []);
-
+  // navigate to popular page
   const goToPopular = () => {
     RootNavigation.navigate("ListOfMovies", {
       movieList: movieList,
       type: "popular",
     });
   };
+  // navigate to favorite page
   const goToFavorite = () => {
     RootNavigation.navigate("ListOfMovies", {
       type: "favorite",
@@ -71,19 +65,30 @@ export default function Welcome() {
         style={styles.backgroundPic}
         source={require("../assets/background/welcome.jpg")}
       >
-        <Text style={styles.header}>welcome</Text>
+        {/* header welcome */}
+        <View style={styles.headerView}>
+          <Text style={styles.header}>WELCOME</Text>
+        </View>
         <View style={styles.btnsBox}>
           {/* Popular btn */}
-          <TouchableOpacity onPress={goToPopular}>
-            <View style={[styles.btn, { backgroundColor: "#d3d3d3" }]}>
-              <Text>Popular movies</Text>
-            </View>
+          <TouchableOpacity
+            style={[
+              colors.categoryBtn,
+              { backgroundColor: colors.popularColor },
+            ]}
+            onPress={goToPopular}
+          >
+            <Text style={styles.btnText}>POPULAR MOVIES</Text>
           </TouchableOpacity>
           {/* Favority btn */}
-          <TouchableOpacity onPress={goToFavorite}>
-            <View style={[styles.btn, { backgroundColor: "#8fbc8f" }]}>
-              <Text>Favorite movies</Text>
-            </View>
+          <TouchableOpacity
+            style={[
+              colors.categoryBtn,
+              { backgroundColor: colors.favoriteColor },
+            ]}
+            onPress={goToFavorite}
+          >
+            <Text style={styles.btnText}>FEVORITE MOVIES</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -95,29 +100,44 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: "bold",
-    textDecorationLine: "underline",
+    color: "white",
+  },
+  headerView: {
+    width: "97%",
+    backgroundColor: "#022C80",
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.8,
+    marginBottom: 5,
   },
   btnsBox: {
-    flex: 0.6,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     width: "100%",
+    marginBottom: 50,
   },
-  btn: {
-    width: 150,
-    height: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-    borderColor: "blue",
-    borderWidth: 1,
-  },
+  //   btn: {
+  //     width: "45%",
+  //     height: 90,
+  //     opacity: 0.9,
+  //     justifyContent: "center",
+  //     backgroundColor: "#6FCF97",
+  //     alignItems: "center",
+  //     borderWidth: 0,
+  //     borderWidth: 1,
+  //   },
   backgroundPic: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+  },
+  btnText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
