@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Modal,
   ImageBackground,
   TouchableOpacity,
   SafeAreaView,
@@ -11,160 +10,92 @@ import {
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
 import { DataStorage } from "../components/DataMoviesStorage";
-import colors from "./StylesGalery";
+import colors from "./Colors";
+import { AntDesign } from '@expo/vector-icons';
 
 export default function MovieDetails({ route, navigation }) {
+  // movie object and index
   const { movie, index } = route.params;
-  //   const movie = {
-  //     title: "Hard Kill",
-  //     poster_path: "/kPzcvxBwt7kEISB9O4jJEuBn72t.jpg",
-  //     overview:
-  //       "When Grizz, Panda, and Ice Bear's love of food trucks and viral videos went out of hand, it catches the attention of Agent Trout from the National Wildlife Control, who pledges to restore the “natural order” by separating them forever. Chased away from their home, the Bears embark on an epic road trip as they seek refuge in Canada, with their journey being filled with new friends, perilous obstacles, and huge parties. The risky journey also forces the Bears to face how they first met and became brothers, in order to keep their family bond from splitting apart. ",
-  //     vote_average: "7.8 ",
-  //   };
+  // error message for user
+  const [error, setError] = useState('');
+  // favorite list
   const [favoriteList, setFavoriteList] = useContext(DataStorage);
-  const [modalDisplay, setModalDisplay] = useState(false);
-  const [screenOpacity, setScreenOpacity] = useState(1);
-  const [displayForWebUser, setDisplayForWebUser] = useState("none");
-  const [addBtnStatusColor, setAddBtnStatusColor] = useState(
-    checkIfMovieOnList(movie) ? colors.colordarkCoral : colors.colorBlueLight
-  );
+  // movie poster
   const imageUrl = `http://image.tmdb.org/t/p/original/${movie.poster_path}`;
   let imageAdress = { uri: imageUrl };
-
-  //   let imageAdress = { uri: "/n6hptKS7Y0ZjkYwbqKOK3jz9XAC.jpg" };
-  //   useEffect(() => {
-  //     return () => {
-  //       <Text>...Loading</Text>;
-  //     };
-  //   }, []);
-  function checkIfMovieOnList(movie) {
-    if (favoriteList == undefined) return false;
+  //   remove movie from favorite list
+  const removeMovieFromFavorite = (index) => {
+    setError('')
+    setFavoriteList(favoriteList.filter((item) => item.id !== index));
+  };
+  //   add movie to favorite list
+  const addToFavorite = (movie) => {
     let duplicateMovies = favoriteList.find(
       (movieObj) => movieObj.id == movie.id
     );
-    if (duplicateMovies == undefined) return false;
-    else {
-      return true;
-    }
-  }
-  //   remove movie from favorite list
-  const removeMovieFromFavorite = (index) => {
-    setFavoriteList(favoriteList.filter((item) => item.id !== index));
-    setAddBtnStatusColor(colors.colorBlueLight);
-  };
-
-  //   add movie to favorite list
-  const addToFavorite = (movie) => {
-    if (!checkIfMovieOnList(movie)) {
+    // if the movie is not on the list, save it to favorite list
+    if (duplicateMovies == undefined) {
       setFavoriteList([...favoriteList, movie]);
-      setAddBtnStatusColor(colors.colordarkCoral);
     }
-    // if the user want to add a movie which is already on the list
+    // if the user try to add a movie more then once
     else {
-      setModalDisplay(true);
-      setScreenOpacity(0.5);
-      setDisplayForWebUser("flex");
+      setError('movie exist on your list')
     }
-  };
-  //   modal ok btn
-  const okBtn = () => {
-    setModalDisplay(false);
-    setScreenOpacity(1);
-    setDisplayForWebUser("none");
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={[styles.background, { opacity: screenOpacity }]}
-        source={imageAdress}
-      >
+      <ImageBackground style={styles.background} source={imageAdress}>
         {/* back btn */}
         <View style={colors.btnBack}>
-          <TouchableOpacity
-            onPress={() => RootNavigation.navigate("ListOfMovies")}
-            style={[
-              colors.btn,
-              {
-                borderTopStartRadius: 50,
-                borderBottomStartRadius: 50,
-              },
-            ]}
-          >
-            <Text style={{ color: colors.colorWhite248RGB }}>BACK</Text>
-          </TouchableOpacity>
+          <AntDesign style={colors.btnBack} name="close" size={30} color="white"
+            onPress={() => RootNavigation.navigate("ListOfMovies")} />
         </View>
         {/* details */}
         <View style={styles.detailsAndBtn}>
+          {/* name */}
           <View style={styles.detailsSquere}>
-            {/* name */}
             <View style={styles.detailLine}>
-              <Text style={styles.headers}>Name </Text>
+              <Text style={styles.headers}>NAME </Text>
               <Text style={styles.detailText}>{movie.title} </Text>
             </View>
             {/* summary */}
             <View style={styles.detailLine}>
-              <Text style={styles.headers}>Summary </Text>
+              <Text style={styles.headers}>SUMMERY </Text>
               <Text style={styles.detailText}>{movie.overview} </Text>
             </View>
             {/* rating */}
             <View style={styles.detailLine}>
-              <Text style={styles.headers}>Rating </Text>
+              <Text style={styles.headers}>RATING</Text>
               <Text style={styles.detailText}>{movie.vote_average} </Text>
             </View>
           </View>
+          {/* error message in case of trying to add movie to favorite list more then once */}
+          {
+            error.length > 0 ?
+              <View style={styles.errorView}>
+                <Text style={styles.error}>{error}</Text>
+              </View>
+              : null
+          }
+
+          {/* buttons - add && remove */}
           <View style={styles.btnsRow}>
-            {/* add btn */}
             <TouchableOpacity
               onPress={() => {
                 addToFavorite(movie);
               }}
-              style={[colors.btn, { backgroundColor: addBtnStatusColor }]}
+              style={styles.btn}
             >
-              <Text style={{ color: colors.colorWhite }}>Add</Text>
+              <Text style={styles.btnText}>ADD</Text>
             </TouchableOpacity>
-            {/* remove btn */}
             <TouchableOpacity
               onPress={() => removeMovieFromFavorite(index)}
-              style={colors.btn}
+              style={styles.btn}
             >
-              <Text style={{ color: colors.colorWhite }}>Remove</Text>
+              <Text style={styles.btnText}>REMOVE</Text>
             </TouchableOpacity>
           </View>
         </View>
-        {/* modal warning alert for trying to add a movie more then once to the favorite list */}
-        {/* ////////////////////////////////////////////////////////////////////////// */}
-        <Modal
-          style={{
-            position: "absolute",
-            width: "100%",
-            alignItems: "center",
-            flex: 1,
-            display: displayForWebUser,
-          }}
-          transparent={true}
-          visible={modalDisplay}
-        >
-          <View style={styles.modalMain}>
-            <Text style={{ textAlign: "center", fontSize: 17 }}>
-              This movie is already on the list
-            </Text>
-            <View
-              style={{
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <TouchableOpacity onPress={okBtn}>
-                <View>
-                  <Text style={{ textAlign: "center", fontSize: 17 }}>
-                    <Text>OK</Text>
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -172,9 +103,22 @@ export default function MovieDetails({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'black'
   },
   background: {
     flex: 1,
+  },
+
+  btn: {
+    width: "48%",
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.detailBtnColor,
+    borderWidth: 1,
+    borderBottomColor: colors.detailBtnColor,
+    opacity: 0.9,
+
   },
   detailsAndBtn: {
     flex: 1,
@@ -183,17 +127,18 @@ const styles = StyleSheet.create({
     paddingBottom: "10%",
   },
   detailLine: {
-    backgroundColor: colors.colorBattleshipGrey,
+    backgroundColor: colors.colorBlack,
     borderWidth: 1,
-    borderColor: colors.colorCloud,
-    borderRadius: 10,
+    borderColor: colors.colorBlack,
     alignItems: "center",
     margin: 5,
     padding: 5,
+    opacity: 0.8,
   },
   headers: {
     fontSize: 18,
-    textDecorationLine: "underline",
+    color: colors.colorWhite,
+    fontWeight: 'bold'
   },
   detailText: {
     textAlign: "center",
@@ -202,17 +147,25 @@ const styles = StyleSheet.create({
   btnsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
+    alignItems: "center",
     width: "100%",
+    marginTop: 5
   },
-  // modal
-  modalMain: {
-    backgroundColor: colors.colorWhite,
-    top: 100,
-    borderRadius: 20,
-    width: "80%",
-    alignSelf: "center",
-    height: 100,
-    zIndex: 5,
-    justifyContent: "space-around",
+  btnText: {
+    color: colors.colorWhite,
+    fontWeight: 'bold'
   },
+  error: {
+    color: colors.colorWhite,
+    fontSize: 15,
+  },
+  errorView: {
+    backgroundColor: 'red',
+    borderWidth: 1,
+    borderColor: colors.colordarkCoral,
+    alignItems: "center",
+    margin: 5,
+    padding: 5,
+    width: '100%'
+  }
 });

@@ -1,13 +1,19 @@
 import React from "react";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import "react-native-gesture-handler";
 import * as RootNavigation from "../RootNavigations.js";
 
 export default function MovieCard(props) {
   const imageUrl = `http://image.tmdb.org/t/p/original/${props.movie.poster_path}`;
-  const UnderC = require("../assets/Icons/Uc.png");
+  // in case of no poster_path
+  const Uc = require("../assets/Icons/Uc.png");
+  // poster url
   let imageAdress = { uri: imageUrl };
-
+  // mouse press on a movie direct to movie details with the movie and its index
   const clickPress = (movie, index) => {
     RootNavigation.navigate("MovieDetails", {
       movie: movie,
@@ -19,12 +25,16 @@ export default function MovieCard(props) {
       onPress={() => clickPress(props.movie, props.movie.id)}
       style={styles.card}
     >
-      {/* background image for each movie */}
       {props.movie.poster_path ? (
-        <Image style={styles.image} source={imageAdress} />
-      ) : (
-        <Image style={styles.image} source={UnderC} />
-      )}
+        <Image
+          style={styles.image}
+          source={imageAdress}
+        />
+      ) : <Image
+          style={styles.image}
+          source={Uc}
+        />}
+
     </TouchableOpacity>
   );
 }

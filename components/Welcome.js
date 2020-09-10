@@ -9,22 +9,23 @@ import {
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
 import axios from "axios";
-import colors from "./StylesGalery";
+import colors from './Colors'
 
 export default function Welcome() {
+  // popular movies list
   const [movieList, setMovieList] = useState([]);
   const apiKey = "dd22d2352bf6e11b0e6fe40a9970011b";
   const apiToken =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZDIyZDIzNTJiZjZlMTFiMGU2ZmU0MGE5OTcwMDExYiIsInN1YiI6IjVmNTY2NjgyZTYyNzE5MDAzN2VkMzZkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VGg6Cmj5bJAUQA_72PQ7SAfYPSDBBDqRqrE-8TWPTUE";
   const mainDomain = "https://api.themoviedb.org/3/";
   const popularDomain = `movie/popular?api_key=${apiKey}&language=en-US&page=1`;
-
-  // axios request
+  // axios
   const axiosRequest = async () => {
-    const popularUrl = mainDomain + popularDomain;
+    const favoriteUrl = mainDomain + popularDomain;
     try {
       let res = await axios({
-        url: popularUrl,
+        url:
+          "https://api.themoviedb.org/3/movie/popular?api_key=dd22d2352bf6e11b0e6fe40a9970011b",
         method: "get",
         headers: {
           "Authorization": `Bearer ${apiToken}`,
@@ -34,10 +35,12 @@ export default function Welcome() {
       let dataFromServer = res.data;
       if (dataFromServer && dataFromServer.results) {
         setMovieList(dataFromServer.results);
+        // console.log(dataFromServer.results);
       }
     } catch (e) {
       console.log(`😱 line 30 Axios failed: ${e}`);
       alert("Axios", `${e}`);
+      return "";
     }
   };
   useEffect(() => {
@@ -46,14 +49,14 @@ export default function Welcome() {
       <Text>...Loading</Text>;
     };
   }, []);
-  // navigate to popular page
+  // navigate to popular page (props of popular)
   const goToPopular = () => {
     RootNavigation.navigate("ListOfMovies", {
       movieList: movieList,
       type: "popular",
     });
   };
-  // navigate to favorite page
+  // navigate to favorite page (props of favorite)
   const goToFavorite = () => {
     RootNavigation.navigate("ListOfMovies", {
       type: "favorite",
@@ -84,7 +87,7 @@ export default function Welcome() {
           <TouchableOpacity
             style={[
               colors.categoryBtn,
-              { backgroundColor: colors.favoriteColor },
+              { backgroundColor: colors.favoriteColor, },
             ]}
             onPress={goToFavorite}
           >
@@ -120,16 +123,6 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 50,
   },
-  //   btn: {
-  //     width: "45%",
-  //     height: 90,
-  //     opacity: 0.9,
-  //     justifyContent: "center",
-  //     backgroundColor: "#6FCF97",
-  //     alignItems: "center",
-  //     borderWidth: 0,
-  //     borderWidth: 1,
-  //   },
   backgroundPic: {
     flex: 1,
     alignItems: "center",

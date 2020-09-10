@@ -1,11 +1,12 @@
 export default {
   // color
-  colorTransparent: "#00000000",
   colorBlack: "#000000",
   colorWhite: "#FFFFFF",
   colorWhite248RGB: "#f8f8f8",
   colorBlueDark: "#22324b",
   colorBlueLight: "#0082f2",
+  // details btn color
+  detailBtnColor: '#022C80',
 
   colorSeafoamBlue: "#50d2c2",
   colorBlueberry: "#393777",
@@ -13,6 +14,7 @@ export default {
   colorCloud: "#ecf0f1",
   colorBattleshipGrey: "#797983",
   colorSlateGrey: "#535264",
+  // warning color
   colordarkCoral: "#d25050",
 
   popularColor: "#2F80ED",
@@ -29,32 +31,12 @@ export default {
     alignItems: "center",
     borderWidth: 0,
     borderWidth: 1,
-    shadowColor: "#b4b3bf",
-    shadowOffset: {
-      width: 0,
-      height: 9,
-    },
-    shadowOpacity: 0.50,
-    shadowRadius: 12.35,
-    elevation: 5,
-
   },
-  // add / remove btns
-  btn: {
-    width: 80,
-    height: 40,
-    backgroundColor: "#0082f2",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "white",
-    borderRadius: 10,
-  },
-  // back btn
+  // back buttons
   btnBack: {
     width: "100%",
     justifyContent: "flex-start",
-    paddingTop: "7%",
-    paddingStart: "5%",
+    paddingTop: "5%",
+    paddingStart: "3%",
   },
 };
