@@ -11,7 +11,7 @@ import MovieDetails from "./components/MovieDetails";
 const Stack = createStackNavigator();
 // stack navigator - navigate between components
 // 1- homepage (Welcome.js) - welcome header and 2 btns (popular & favorite movies)
-// 2- MovieDetail component gets the type of movies the user want to see and show them 
+// 2- ListOfMovies component shows the movies for each category 
 // 3- MovieDetails - details for each movie pressed and 2 btn (add or remove movie from favorite list)
 // 4- dataStorage used by Createcontext
 // 5- StyleGalery - export colors and styles

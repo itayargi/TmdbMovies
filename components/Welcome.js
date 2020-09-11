@@ -9,7 +9,7 @@ import {
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
 import axios from "axios";
-import colors from './Colors'
+import colors from './StylesGalery'
 
 export default function Welcome() {
   // popular movies list
@@ -35,7 +35,6 @@ export default function Welcome() {
       let dataFromServer = res.data;
       if (dataFromServer && dataFromServer.results) {
         setMovieList(dataFromServer.results);
-        // console.log(dataFromServer.results);
       }
     } catch (e) {
       console.log(`😱 line 30 Axios failed: ${e}`);

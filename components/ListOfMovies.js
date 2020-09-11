@@ -10,7 +10,7 @@ import MovieCard from "./MovieCard";
 import "react-native-gesture-handler";
 import * as RootNavigation from "../RootNavigations.js";
 import { DataStorage } from "../components/DataMoviesStorage";
-import colors from "./Colors";
+import colors from "./StylesGalery";
 import { AntDesign } from '@expo/vector-icons';
 
 export default function ListOfMovies({ route, navigation }) {
@@ -90,15 +90,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: 'white',
-  },
-  btn: {
-    width: 80,
-    height: 40,
-    backgroundColor: colors.colorBlueLight,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "white",
-    borderRadius: 10,
   },
 });

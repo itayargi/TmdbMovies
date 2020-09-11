@@ -10,7 +10,7 @@ import {
 import * as RootNavigation from "../RootNavigations.js";
 import "react-native-gesture-handler";
 import { DataStorage } from "../components/DataMoviesStorage";
-import colors from "./Colors";
+import colors from "./StylesGalery";
 import { AntDesign } from '@expo/vector-icons';
 
 export default function MovieDetails({ route, navigation }) {
@@ -47,7 +47,7 @@ export default function MovieDetails({ route, navigation }) {
       <ImageBackground style={styles.background} source={imageAdress}>
         {/* back btn */}
         <View style={colors.btnBack}>
-          <AntDesign style={colors.btnBack} name="close" size={30} color="white"
+          <AntDesign name="close" size={30} color="white"
             onPress={() => RootNavigation.navigate("ListOfMovies")} />
         </View>
         {/* details */}
@@ -84,13 +84,13 @@ export default function MovieDetails({ route, navigation }) {
               onPress={() => {
                 addToFavorite(movie);
               }}
-              style={styles.btn}
+              style={colors.btn}
             >
               <Text style={styles.btnText}>ADD</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => removeMovieFromFavorite(index)}
-              style={styles.btn}
+              style={colors.btn}
             >
               <Text style={styles.btnText}>REMOVE</Text>
             </TouchableOpacity>
@@ -107,18 +107,6 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-  },
-
-  btn: {
-    width: "48%",
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.detailBtnColor,
-    borderWidth: 1,
-    borderBottomColor: colors.detailBtnColor,
-    opacity: 0.9,
-
   },
   detailsAndBtn: {
     flex: 1,

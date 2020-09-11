@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "movierateP",
-    "slug": "movieratep",
+    "name": "movierate",
+    "slug": "movierate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
